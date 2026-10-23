@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: driftwatch
+      POSTGRES_PASSWORD: driftwatch
+      POSTGRES_DB: driftwatch
+    ports:
+      # 5433 on the host so a local Postgres on 5432 doesn't collide.
+      - "5433:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U driftwatch"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  dbdata:
